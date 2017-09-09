@@ -3,7 +3,6 @@ var parseJson = function(jsonStr){
   var str = jsonStr
   return parseValue()
 
-  debugger
   function parseValue(){
     if(str[i] === '{'){
       return parseObject(str)
@@ -17,6 +16,9 @@ var parseJson = function(jsonStr){
       return parseFalse()
     }else if(str[i] ==='"'){
       return parseString()
+    }else if(str[i] === ' ' || str[i] === ':'){
+      i++ 
+      return parseValue()
     }else {
       return parseNumber()
     }
@@ -26,8 +28,12 @@ var parseJson = function(jsonStr){
     i++
     var result = {}
     while(str[i] != '}'){
+      while(str[i] !== '"'){
+        if(str[i] === '}') break
+        i++
+      }
+      if(str[i] === '}') break
       var key = parseString()
-      i++
       var value = parseValue()
       result[key] = value
       if(str[i] === ','){
